@@ -1035,6 +1035,8 @@ static int pip_find_symbols( void *handle, pip_symbols_t *symp ) {
   symp->progname      = dlsym( handle, "__progname"      );
   symp->progname_full = dlsym( handle, "__progname_full" );
 
+  long long *__malloc_hook = dlsym( handle, "__malloc_hook");
+  *__malloc_hook = 0x0;
   /* check mandatory symbols */
   if( symp->main == NULL || symp->environ == NULL ) {
     pip_warn_mesg( "Unable to find main (not linked with '-rdynamic' option?)" );
@@ -1182,7 +1184,8 @@ static int pip_init_glibc( pip_symbols_t *symbols,
 #ifndef PIP_NO_MALLOPT
   if( symbols->mallopt != NULL ) {
     DBGF( ">> mallopt()" );
-    if( symbols->mallopt( M_MMAP_THRESHOLD, 1 ) == 1 ) {
+	/*
+    if( symbols->mallopt( M_MMAP_THRESHOLD, 16 * 1024 * 1024 ) == 1 ) {
       DBGF( "<< mallopt(M_MMAP_THRESHOLD): succeeded" );
     } else {
       DBGF( "<< mallopt(M_MMAP_THRESHOLD): failed !!!!!!" );
@@ -1192,6 +1195,7 @@ static int pip_init_glibc( pip_symbols_t *symbols,
     } else {
       DBGF( "<< mallopt(M_TRIM_THRESHOLD): failed !!!!!!" );
     }
+	*/
   }
 #endif
 

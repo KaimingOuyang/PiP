@@ -37,7 +37,7 @@ include $(top_srcdir)/build/var.mk
 
 CPPFLAGS += -I$(PIPINCDIR)
 CFLAGS += $(PICFLAG)
-LDFLAGS  = -shared  -Wl,-soname -Wl,$(LIBRARY) -L$(glibc_libdir) -ldl
+LDFLAGS  = -shared  -Wl,-soname -Wl,$(LIBRARY) -L$(glibc_libdir) -Wl,-rpath=$(glibc_libdir) -ldl 
 
 LIBNAME  = libpip.so
 SO_MAJOR = 0
@@ -63,7 +63,7 @@ include $(top_srcdir)/build/rule.mk
 $(OBJS): $(DEPINCS) Makefile
 
 $(LIBRARY): $(OBJS) Makefile
-	$(CC) $(LDFLAGS) $(OBJS) -o $@
+	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 	rm -f $(LIBNAME)
 	ln -s $(LIBRARY) $(LIBNAME)
 
