@@ -1034,9 +1034,7 @@ static int pip_find_symbols( void *handle, pip_symbols_t *symp ) {
   symp->libc_argcp    = dlsym( handle, "__libc_argc"     );
   symp->progname      = dlsym( handle, "__progname"      );
   symp->progname_full = dlsym( handle, "__progname_full" );
-
-  long long *__malloc_hook = dlsym( handle, "__malloc_hook");
-  *__malloc_hook = 0x0;
+  
   /* check mandatory symbols */
   if( symp->main == NULL || symp->environ == NULL ) {
     pip_warn_mesg( "Unable to find main (not linked with '-rdynamic' option?)" );
