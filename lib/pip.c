@@ -1034,6 +1034,8 @@ static int pip_find_symbols( void *handle, pip_symbols_t *symp ) {
   symp->libc_argcp    = dlsym( handle, "__libc_argc"     );
   symp->progname      = dlsym( handle, "__progname"      );
   symp->progname_full = dlsym( handle, "__progname_full" );
+
+  symp->ptmalloc_stealing_init = dlsym( handle, "ptmalloc_stealing_init" );
   
   /* check mandatory symbols */
   if( symp->main == NULL || symp->environ == NULL ) {
@@ -1207,6 +1209,12 @@ static int pip_init_glibc( pip_symbols_t *symbols,
       DBGF( ">> __ctype_init@%p()", symbols->ctype_init );
       symbols->ctype_init();
       DBGF( "<< __ctype_init@%p()", symbols->ctype_init );
+    }
+
+    if(symbols->ptmalloc_stealing_init){
+      symbols->ptmalloc_stealing_init();
+    }else{
+      printf("[WARN] ptmalloc_stealing_init does not exist\n");
     }
 #ifdef DEBUG
     CHECK_CTYPE;

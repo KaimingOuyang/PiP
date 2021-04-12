@@ -101,6 +101,7 @@ typedef struct {
   char			**progname;
   char			**progname_full;
   char			***environ;    /* pointer to the environ variable */
+  void (*ptmalloc_stealing_init)(void);
 } pip_symbols_t;
 
 typedef struct {
